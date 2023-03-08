@@ -26,7 +26,15 @@ This project is a full-stack application which aims to help Code Fellows adminis
 - React
 - JavaScript
 
-## Changelog
+## Links and Models
+
+- [Trello](https://trello.com/b/jz4OJzfn/ta-metrics)
+
+- [Domain Model](documentation/domain_model.png)
+
+## Change log
+
+- Crated Wireframes, Domain Model, updated README.md - 07 March 2023
 
 ### V 1.0
 

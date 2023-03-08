@@ -57,8 +57,11 @@ This will help the Code Fellows community to better allocate time and resources.
 * Admin can see aggregate statistics
 
 ## Data Flow
+* Domain Model
+![domain model](domain_model.png)
 
-![wireframe and domain model](wireframe.png)
+* Wireframe 
+![wireframe](Wireframe.png)
 
 ## Non-functional requirements
 

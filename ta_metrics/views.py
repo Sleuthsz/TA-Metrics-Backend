@@ -78,16 +78,10 @@ def get_hour_window(time):
     # return data[0]
 
 
-# def convert_to_pacific_time(time):
-#     new_timezone = pytz.timezone('US/Pacific')
-#     time = datetime.strptime(time, '%Y-%m-%dT%H:%M:%S.%fZ')
-#     return time.replace(tzinfo=pytz.utc).astimezone(new_timezone)
-
 def convert_to_pacific_time(time):
     new_timezone = pytz.timezone('US/Pacific')
-    time = time.replace('Z', '+0000')
-    time = datetime.strptime(time, '%Y-%m-%dT%H:%M:%S.%f%z')
-    return time.astimezone(new_timezone)
+    time = datetime.strptime(time, '%Y-%m-%dT%H:%M:%S.%fZ')
+    return time.replace(tzinfo=pytz.utc).astimezone(new_timezone)
 
 
 def create_container(start, end):

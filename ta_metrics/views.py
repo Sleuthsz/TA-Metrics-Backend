@@ -10,6 +10,9 @@ import pytz
 
 # Create your views here.
 def call_api(start_date):
+    """
+    Makes call to Code Fellows API and returns JSON data from specified start date
+    """
     start_date = datetime.strptime(start_date, '%Y-%m-%d')
 
     num_of_days = datetime.now() - start_date
@@ -23,6 +26,9 @@ def call_api(start_date):
 
 
 def get_tickets_and_wait(start_date, end_date):
+    """
+    Populates container with data on number of tickets and total wait times
+    """
     data = call_api(start_date)
 
     container = create_container(start_date, end_date)
@@ -66,6 +72,9 @@ def get_tickets_and_wait(start_date, end_date):
 
 
 def get_hour_window(time):
+    """
+    Converts hour to string for dictionary look up in container
+    """
     hour = time.hour
 
     if hour < 12:
@@ -79,12 +88,18 @@ def get_hour_window(time):
 
 
 def convert_to_pacific_time(time):
+    """
+    Converts datetime objects from Code Fellows API to Pacific timezone
+    """
     new_timezone = pytz.timezone('US/Pacific')
     time = datetime.strptime(time, '%Y-%m-%dT%H:%M:%S.%fZ')
     return time.replace(tzinfo=pytz.utc).astimezone(new_timezone)
 
 
 def create_container(start, end):
+    """
+    Creates empty container for get_tickets_and_wait function
+    """
     start_date = datetime.strptime(start, '%Y-%m-%d')
     end_date = datetime.strptime(end, '%Y-%m-%d')
 

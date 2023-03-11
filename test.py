@@ -1,4 +1,4 @@
-from ta_metrics.views import call_api
+from ta_metrics.views import call_api, convert_to_pacific_time, get_tickets_and_wait, create_container
 from datetime import datetime, timedelta
 import pytz
 
@@ -29,6 +29,11 @@ if __name__ == "__main__":
     # start_date = start_date + timedelta(days=1)
     # print(start_date)
 
-    print(call_api('2023-03-06', '2023-03-08'))
+    # print(call_api('2023-03-06', '2023-03-08'))
+
+    print(get_tickets_and_wait('2023-03-06', '2023-03-09'))
+
+
+    #print(create_container('2023-02-27', '2023-03-03'))
 
 

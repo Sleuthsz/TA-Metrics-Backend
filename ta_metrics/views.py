@@ -6,6 +6,8 @@ from ta_metrics_project.settings import CF_API
 from datetime import datetime, timedelta
 import json
 import pytz
+# from django.http import HTTPRequest, HttpResponse
+from django.http import JsonResponse
 
 
 # Create your views here.
@@ -25,10 +27,13 @@ def call_api(start_date):
     return res.json()
 
 
-def get_tickets_and_wait(start_date, end_date):
+def get_tickets_and_wait(request):
     """
     Populates container with data on number of tickets and total wait times
     """
+    start_date = request.GET.get('start_date')
+    end_date = request.GET.get('end_date')
+
     data = call_api(start_date)
 
     container = create_container(start_date, end_date)
@@ -68,7 +73,8 @@ def get_tickets_and_wait(start_date, end_date):
             container[date_idx]['hours'][hour_window]['tickets'] += 1
             container[date_idx]['hours'][hour_window]['tot_wait'] += wait_time
 
-    return container
+    # return json.dumps(container)
+    return JsonResponse(container, safe=False)
 
 
 def get_hour_window(time):

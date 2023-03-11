@@ -1,6 +1,6 @@
 from django.urls import path
-from . import views
+from .views import get_tickets_and_wait
 
 urlpatterns = [
-    path('/ticket_wait', get_tickets_and_wait.view_function, name='get_tickets_and_wait')
+    path('ticket_wait', get_tickets_and_wait, name='get_tickets_and_wait')
 ]

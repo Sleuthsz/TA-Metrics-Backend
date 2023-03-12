@@ -17,6 +17,9 @@ def call_api(start_date):
     """
     start_date = datetime.strptime(start_date, '%Y-%m-%d')
 
+    if start_date > datetime.now():
+        raise Exception('Invalid Date')
+
     num_of_days = datetime.now() - start_date
 
     base_url = CF_API
@@ -140,5 +143,3 @@ def create_container(start, end):
     return container
 
 
-if __name__ == "__main__":
-    print(call_api(1))

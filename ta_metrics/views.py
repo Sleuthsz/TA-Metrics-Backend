@@ -8,6 +8,10 @@ import json
 import pytz
 # from django.http import HTTPRequest, HttpResponse
 from django.http import JsonResponse
+import multiprocessing as mp
+from multiprocessing import pool
+from dateutil import parser
+import numpy as np
 
 
 # Create your views here.
@@ -143,3 +147,28 @@ def create_container(start, end):
     return container
 
 
+def get_summary_stats():
+    # start_date = request.GET.get('start_date')
+    # end_date = request.GET.get('end_date')
+
+    start_date = '2023-03-08'
+
+
+    data = call_api(start_date)
+
+    date_list: list[float] = []
+
+    for item in data:
+        if 'createTime' in item and item['createTime'] and 'assignedTime' in item and item['assignedTime']:
+            assigned = parser.parse(item['assignedTime']).timestamp()
+            created = parser.parse(item['createTime']).timestamp()
+            date_list.append(assigned - created)
+
+    #date_array: np.ndarray = np.array([parser.parse(date).timestamp() for date in date_list])
+    date_array: np.nparray = np.array(date_list)
+    with mp.Pool() as pool:
+        mean_date: float = np.mean(date_array)
+        median_date: float = np.median(date_array)
+        avg_time_delta: float = np.mean(np.abs(date_array - mean_date))
+
+    return {'mean': mean_date, 'median': median_date, 'average_time_delta': avg_time_delta}

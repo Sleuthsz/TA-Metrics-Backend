@@ -1,10 +1,12 @@
 import logging
+import time
 
 import jwt
 import redis
 from django.conf import settings
 from django.http import JsonResponse, HttpResponseBadRequest, HttpResponse
 from django.shortcuts import redirect
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view
 from slack_sdk import WebClient
 from slack_sdk.oauth import OpenIDConnectAuthorizeUrlGenerator, RedirectUriPageRenderer
@@ -56,7 +58,7 @@ def oauth_callback(request):
                 logger.info(f"openid.connect.token response: {token_response}\n")
                 token = token_response.get("id_token")
                 claims = jwt.decode(token, options={"verify_signature": False}, algorithms=["RS256"])
-                logger.info(f"claims (decoded id_token): {claims}\n")
+                logger.info(f"claims (decoded token): {claims}\n")
 
                 user_token = token_response.get("access_token")
                 user_info_response = WebClient(token=user_token).openid_connect_userInfo()
@@ -76,18 +78,26 @@ def oauth_callback(request):
         return HttpResponseBadRequest(f'Something is wrong with the installation (error: {error})')
 
 
+@csrf_exempt
 @api_view(['GET'])
 def id_token(request):
     print('HEADERS=================')
-    print(request.META)
-    # user_id = request.GET.get('user_id')
-    # logger.info(f'USER ID: {user_id}')
-    # retrieved_id_token = redis_client.get(user_id)
-    # logger.info(f'ID TOKEN: {retrieved_id_token}')
-    # return HttpResponse(status=200)
-    return JsonResponse({
-        'good': 'good'
-    })
-    # return JsonResponse({
-    #     'id_token': retrieved_id_token.decode('utf-8')
-    # })
+    # print(request.META)
+    # print(request.META.get('HTTP_AUTHORIZATION'))
+    token = request.META.get('HTTP_AUTHORIZATION').split()[1]
+    # print(token)
+    claims = jwt.decode(token, options={"verify_signature": False}, algorithms=["RS256"])
+    # logger.info(f"claims (decoded id_token): {claims}\n")
+    # print(claims.get('https://slack.com/user_id'))
+    expiration_time = claims.get('exp')
+    current_time = int(time.time())
+    if expiration_time < current_time:
+        print('IM HERE')
+        return redirect(f'http://localhost:3000/login/?expired=true')
+    else:
+        print('IM NOW HERE')
+        user_id = claims.get('https://slack.com/user_id')
+        retrieved_id_token = redis_client.get(user_id)
+        logger.info(f'ID TOKEN: {retrieved_id_token}')
+        if retrieved_id_token is not None:
+            return HttpResponse(status=200)

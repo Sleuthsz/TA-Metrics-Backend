@@ -32,6 +32,25 @@ SECRET_KEY = 'django-insecure-a8=jb#@i+zigocnrk$2(++00#-@8ve10zolxa8(**z*jazb46f
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+# CORS_ALLOW_HEADERS = DEFAULT_HEADERS
+# CORS_EXPOSE_HEADERS = DEFAULT_HEADERS
+CORS_ALLOW_HEADERS = "*"
+
+ALLOWED_HOSTS = ['*']
+# CORS_ORIGIN_ALLOW_ALL = True
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+]
+# CORS_ALLOW_ALL_ORIGINS = True
+
+CORS_ALLOW_CREDENTIALS = True
+CSRF_COOKIE_HTTPONLY = True
+SESSION_COOKIE_HTTPONLY = True
+
+SESSION_COOKIE_SAMESITE = 'None'
+CSRF_COOKIE_SAMESITE = 'None'
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -141,22 +160,6 @@ REST_FRAMEWORK = {
 SLACK_CLIENT_ID = env('SLACK_CLIENT_ID')
 SLACK_CLIENT_SECRET = env('SLACK_CLIENT_SECRET')
 SLACK_REDIRECT_URL = env('SLACK_REDIRECT_URL')
-
-# CORS_ALLOWED_ORIGINS = [
-#     "https://example.com",
-#     "https://sub.example.com",
-#     "http://localhost:3000",
-#     "http://127.0.0.1:3000",
-# ]
-#
-CORS_ALLOW_HEADERS = DEFAULT_HEADERS
-
-ALLOWED_HOSTS = ['*']
-# CORS_ORIGIN_ALLOW_ALL = True
-
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-]
 
 CACHES = {
     'default': {

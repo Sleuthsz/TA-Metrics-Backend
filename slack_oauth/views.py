@@ -3,7 +3,7 @@ import logging
 import jwt
 import redis
 from django.conf import settings
-from django.http import JsonResponse, HttpResponseBadRequest
+from django.http import JsonResponse, HttpResponseBadRequest, HttpResponse
 from django.shortcuts import redirect
 from rest_framework.decorators import api_view
 from slack_sdk import WebClient
@@ -78,10 +78,16 @@ def oauth_callback(request):
 
 @api_view(['GET'])
 def id_token(request):
-    user_id = request.GET.get('user_id')
-    logger.info(f'USER ID: {user_id}')
-    retrieved_id_token = redis_client.get(user_id)
-    logger.info(f'ID TOKEN: {retrieved_id_token}')
+    print('HEADERS=================')
+    print(request.META)
+    # user_id = request.GET.get('user_id')
+    # logger.info(f'USER ID: {user_id}')
+    # retrieved_id_token = redis_client.get(user_id)
+    # logger.info(f'ID TOKEN: {retrieved_id_token}')
+    # return HttpResponse(status=200)
     return JsonResponse({
-        'id_token': retrieved_id_token.decode('utf-8')
+        'good': 'good'
     })
+    # return JsonResponse({
+    #     'id_token': retrieved_id_token.decode('utf-8')
+    # })
